@@ -19,23 +19,13 @@ class Home extends React.Component {
       this.props.fillCart(this.props.user.id);
   }
 
-  getCdData = (genre = 'All') => {
+  getCdData = () => {
       let cdProductsFilter = [];
       
       Axios.get(`${API_URL}/product`)
       .then(res => {
-          console.log(res.data);
-          
-          if(genre == 'All'){
-            this.setState({ cdProducts: res.data })
-          } else {
-            res.data.map(val => {
-              if(val.genre == genre){
-                cdProductsFilter = [...cdProductsFilter, val]
-              }
-            })
-            this.setState({cdProducts: [...cdProductsFilter]});
-          }
+        console.log(res.data);
+        this.setState({ cdProducts: res.data })
       })
       .catch(err => {
           console.log(err);
@@ -45,11 +35,13 @@ class Home extends React.Component {
   renderCards = () => {
     return this.state.cdProducts.map((val) => {
       if(val.title.toLowerCase().includes(this.props.search.searchProduct.toLowerCase())){
-        return (
-          <Link style={{ textDecoration: "none", color: "inherit" }} to={`/product/${val.id}`}>
-            <Card data={val} />
-          </Link>
-        ) 
+        if(val.stock > 0){
+          return (
+            <Link style={{ textDecoration: "none", color: "inherit" }} to={`/product/${val.id}`}>
+              <Card data={val} />
+            </Link>
+          ) 
+        }
       }
     });
   };
@@ -62,13 +54,13 @@ class Home extends React.Component {
     return (  
       <>
         <center>
-          <select className="form-control mt-3" style={{ width: "100px" }}>
+          {/* <select className="form-control mt-3" style={{ width: "100px" }}>
             <option selected value="All" onClick={() => { this.getGenre("All") }}>All</option>
             <option value="Motivation" onClick={() => { this.getGenre("Rock n Roll") }}>Rock n Roll</option>
             <option value="Science" onClick={() => { this.getGenre("Blues") }}>Blues</option>
             <option value="Philosophy" onClick={() => { this.getGenre("Pop Punk") }}>Pop Punk</option>
             <option value="Fiction" onClick={() => { this.getGenre("Metal") }}>Metal</option>
-          </select>
+          </select> */}
         </center>
         <div className="row mt-3 mx-5 d-flex justify-content-center">
           {this.renderCards()}

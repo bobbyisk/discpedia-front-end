@@ -6,7 +6,7 @@ import { Table, Alert } from "reactstrap";
 import swal from "sweetalert";
 import ButtonUI from '../../components/Button/Button';
 import { Link } from "react-router-dom";
-import { addCartQuantity } from "../../../redux/actions/qtycart";
+import { addCartqty, addCartQuantity } from "../../../redux/actions/qtycart";
 import { fillCart } from "../../../redux/actions";
 import { priceFormatter } from "../../../supports/helpers/formatter";
 
@@ -25,7 +25,7 @@ class Cart extends React.Component {
         .then(res => {
             console.log(res.data);
             res.data.map(val => {
-                return total += val.quantity * val.product.price;
+                return total += val.qty * val.product.price;
             })
             this.setState({ cartData: res.data, totalPrice: total });
         })
@@ -50,7 +50,7 @@ class Cart extends React.Component {
 
     renderCartData = () => {
         return this.state.cartData.map((val, idx) => {
-            const { quantity, product, id } = val;
+            const { qty, product, id } = val;
             const { title, img, price } = product;
             return (
                 <tr>
@@ -63,7 +63,7 @@ class Cart extends React.Component {
                         { style: "currency", currency: "IDR" }).format(price)
                     }
                     </td>
-                    <td>{quantity}</td>
+                    <td>{qty}</td>
                     <td>
                     {" "}
                     <img
@@ -88,9 +88,9 @@ class Cart extends React.Component {
     renderCheckout = () => {
         let total = 0;
         return this.state.cartData.map((val, idx) => {
-            const { quantity, product, id } = val;
+            const { qty, product, id } = val;
             const { title, img, price } = product;
-            total = quantity * price
+            total = qty * price
 
             return (
                 <tr>
@@ -103,7 +103,7 @@ class Cart extends React.Component {
                         { style: "currency", currency: "IDR" }).format(price)
                     }
                     </td>
-                    <td>{quantity}</td>
+                    <td>{qty}</td>
                     <td>
                     {
                         new Intl.NumberFormat(
@@ -148,10 +148,10 @@ class Cart extends React.Component {
         let totalPrice = 0;
 
         this.state.cartData.map(val => {
-            const { quantity, product } = val;
+            const { qty, product } = val;
             const { price } = product;
 
-            totalPrice += quantity * price;
+            totalPrice += qty * price;
         });
 
         let shippingPrice = 0;
@@ -175,22 +175,20 @@ class Cart extends React.Component {
     }
 
     confirmHandler = () => {
-        Axios.post(`${API_URL}/transactions`, {
-            userId: this.props.user.id,
+        Axios.post(`${API_URL}/transaction/${this.props.user.id}`, {
             totalPrice: this.renderTotalPrice(),
             status: "pending",
+            buktiTrf: "",
             buyDate: new Date().toLocaleDateString(),
             buyEndDate: "-",
         })
         .then((res) => {
             console.log(res);
             this.state.cartData.map((val) => {
-                Axios.post(`${API_URL}/transaction_details`, {
-                    transactionId: res.data.id,
-                    productId: val.product.id,
+                Axios.post(`${API_URL}/transactionDetails/${res.data.id}/${val.product.id}`, {
                     price: val.product.price,
-                    quantity: val.quantity,
-                    totalPrice: val.product.price * val.quantity
+                    qty: val.qty,
+                    totalPrice: val.product.price * val.qty
                 })
                 .then((res) => {
                   console.log(res);
@@ -244,7 +242,7 @@ class Cart extends React.Component {
                                         <th>No.</th>
                                         <th>Name</th>
                                         <th>Price</th>
-                                        <th>Quantity</th>
+                                        <th>qty</th>
                                         <th>Total</th>
                                     </tr>
                                     </thead>

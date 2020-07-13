@@ -52,7 +52,7 @@ class ProductDetails extends React.Component {
                     })
                 } else {
                     Axios.post(`${API_URL}/cart/add/${this.props.user.id}/${this.state.bookProduct.id}`, {
-                        quantity: 1
+                        qty: 1
                     })
                     .then(res => {
                         console.log(res.data);
@@ -87,7 +87,7 @@ class ProductDetails extends React.Component {
     }
 
     render() {
-        const { title, img, genre, artist, quantity_buyer, id, price, deskripsi } = this.state.bookProduct;
+        const { title, img, artist, qty, id, price, deskripsi } = this.state.bookProduct;
 
         return (
             <div className="container">
@@ -109,7 +109,7 @@ class ProductDetails extends React.Component {
                             currency: "IDR",
                         }).format(price)}
                         </h4>
-                        <p className="mt-4">Genre: <i>{genre}</i></p>
+                        {/* <p className="mt-4">Genre: <i>{genre}</i></p> */}
                         <p className="mt-2">{deskripsi}</p>
                         {/* <TextField type="number" placeholder="Quantity" className="mt-3" /> */}
                         <div className="d-flex flex-row mt-4">

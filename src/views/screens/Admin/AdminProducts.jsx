@@ -13,14 +13,12 @@ class AdminProducts extends React.Component {
         createForm: {
             title: "",
             img: "",
-            genre: "",
             artist: ""
         },
         editForm: {
             id: 0,
             title: "",
             img: "",
-            genre: "",
             artist: ""
         },
         modalOpen: false,
@@ -136,13 +134,14 @@ class AdminProducts extends React.Component {
 
     renderBookList = () => {
         return this.state.bookList.map((val, idx) => {
-            const { id, title, img, genre, artist } = val
+            const { id, title, img, genre, artist, stock } = val
             return (
                 <>
                     <tr>
                         <td>{idx + 1}</td>
                         <td>{title}</td>
                         <td>{id}</td>
+                        <td>{stock}</td>
                         <td>
                             <ButtonUI className='d-inline' onClick={() => this.editBtnHandler(idx)}>Edit</ButtonUI>
                             <ButtonUI className='d-inline ml-2' onClick={() => this.deleteBtnHandler(id)}>Delete</ButtonUI>
@@ -168,7 +167,8 @@ class AdminProducts extends React.Component {
                             <th></th>
                             <th>Title</th>
                             <th>ID</th>
-                            <th></th>
+                            <th>Stock</th>
+                            <th>Action</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -182,7 +182,7 @@ class AdminProducts extends React.Component {
                 >
                     <ModalHeader toggle={this.toggleModal}>
                         <caption>
-                            <h3>Edit Book</h3>
+                            <h3>Edit CD</h3>
                         </caption>
                     </ModalHeader>
                     <ModalBody>
@@ -202,15 +202,6 @@ class AdminProducts extends React.Component {
                                     value={this.state.editForm.title}
                                     placeholder="Title"
                                     onChange={(e) => this.inputHandler(e, "title", "editForm")}
-                                />
-                            </div>
-                            <div className="col-12">
-                                Genre: 
-                                <input
-                                    className="m-2"
-                                    value={this.state.editForm.genre}
-                                    placeholder="Genre"
-                                    onChange={(e) => this.inputHandler(e, "genre", "editForm")}
                                 />
                             </div>
                             <div className="col-12">
@@ -235,6 +226,7 @@ class AdminProducts extends React.Component {
                             <div className="col-12">
                                 Price:
                                 <input
+                                    type="number"
                                     className="m-2"
                                     value={this.state.editForm.price}
                                     placeholder="Price"
@@ -253,19 +245,11 @@ class AdminProducts extends React.Component {
                             <div className="col-12">
                                 Stock Buyer:
                                 <input
+                                    type="number"
                                     className="m-2"
-                                    value={this.state.editForm.stock_buyer}
-                                    placeholder="Stock Buyer"
-                                    onChange={(e) => this.inputHandler(e, "stock_buyer", "editForm")}
-                                />
-                            </div>
-                            <div className="col-12">
-                                Stock Gudang:
-                                <input
-                                    className="m-2"
-                                    value={this.state.editForm.stock_gudang}
-                                    placeholder="Stock Gudang"
-                                    onChange={(e) => this.inputHandler(e, "stock_gudang", "editForm")}
+                                    value={this.state.editForm.stock}
+                                    placeholder="Stock "
+                                    onChange={(e) => this.inputHandler(e, "stock", "editForm")}
                                 />
                             </div>
                             <div className="col-5 mt-3 offset-1">
@@ -316,7 +300,7 @@ class AdminProducts extends React.Component {
                                 />
                             </td>
                         </tr>
-                        <tr>
+                        {/* <tr>
                             <td>Genre</td>
                             <td>
                                 <input
@@ -324,7 +308,7 @@ class AdminProducts extends React.Component {
                                     onChange={(e) => this.inputHandler(e, "genre", "createForm")}
                                 />
                             </td>
-                        </tr>
+                        </tr> */}
                         <tr>
                             <td>Image</td>
                             <td>
@@ -348,17 +332,9 @@ class AdminProducts extends React.Component {
                             <td>Stock Buyer</td>
                             <td>
                                 <input
-                                    placeholder="Stock Buyer"
-                                    onChange={(e) => this.inputHandler(e, "stock_buyer", "createForm")}
-                                />
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>Stock Gudang</td>
-                            <td>
-                                <input
-                                    placeholder="Stock Gudang"
-                                    onChange={(e) => this.inputHandler(e, "stock_gudang", "createForm")}
+                                    type="number"
+                                    placeholder="Stock"
+                                    onChange={(e) => this.inputHandler(e, "stock", "createForm")}
                                 />
                             </td>
                         </tr>
@@ -366,6 +342,7 @@ class AdminProducts extends React.Component {
                             <td>Price</td>
                             <td>
                                 <input
+                                    type="number"
                                     placeholder="Price"
                                     onChange={(e) => this.inputHandler(e, "price", "createForm")}
                                 />

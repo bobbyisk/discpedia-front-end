@@ -96,9 +96,9 @@ class Navbar extends React.Component {
                       <DropdownItem>
                         <Link
                           style={{ color: "inherit", textDecoration: "none" }}
-                          to="/admin/dashboard"
+                          to="/admin/genre"
                         >
-                          Dashboard
+                          Genre
                       </Link>
                       </DropdownItem>
                       <DropdownItem>
@@ -139,9 +139,9 @@ class Navbar extends React.Component {
                         <DropdownItem>
                           <Link
                             style={{ color: "inherit", textDecoration: "none" }}
-                            to="/history"
+                            to={`/status/${this.props.user.id}`}
                           >
-                            History
+                            Status
                           </Link>
                         </DropdownItem>
                       </>
