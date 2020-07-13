@@ -1,0 +1,82 @@
+{
+  "users": [
+    {
+      "username": "admin",
+      "fullName": "Admin Discpedia",
+      "email": "admin@discpedia.co.id",
+      "password": "admin",
+      "role": "admin",
+      "id": 1
+    },
+    {
+      "username": "bobby",
+      "email": "bobby@mail.com",
+      "password": "bobby",
+      "alamat": "",
+      "telp": "",
+      "role": "user",
+      "id": 2
+    }
+  ],
+  "products": [
+    {
+      "title": "Be Here Now",
+      "img": "https://upload.wikimedia.org/wikipedia/en/0/08/BeHereNowcover.jpg",
+      "genre": "Rock n Roll",
+      "artist": "Oasis",
+      "price": 100000,
+      "desc": "Be Here Now is the third studio album by English rock band Oasis, released on 21 August 1997 by Creation Records. Following the worldwide success of their first two albums, Definitely Maybe (1994) and (What's the Story) Morning Glory? (1995), the album was highly anticipated.",
+      "quantity_buyer": 3,
+      "id": 1
+    },
+    {
+      "title": "Abbey Road",
+      "img": "https://c.files.bbci.co.uk/3970/production/_108240741_beatles-abbeyroad-square-reuters-applecorps.jpg",
+      "genre": "Blues",
+      "artist": "The Beatles",
+      "price": 100000,
+      "desc": "Abbey Road is the eleventh studio album by the English rock band the Beatles, released on 26 September 1969 by Apple Records. Named after the location of EMI Studios in London, the cover features the group walking across the street's zebra crossing, an image that became one of the most famous and imitated in popular music. The album's initially mixed reviews were contrasted by its immediate commercial success, topping record charts in the UK and US.",
+      "quantity_buyer": 1,
+      "id": 2
+    },
+    {
+      "title": "Nimrod",
+      "img": "https://upload.wikimedia.org/wikipedia/id/d/db/GreenDay_-_nimrod..jpg",
+      "genre": "Pop Punk",
+      "artist": "Green Day",
+      "price": 100000,
+      "desc": "Nimrod (stylized as nimrod.) is the fifth studio album by American rock band Green Day, released on October 14, 1997 by Reprise Records. The band began work on the album in the wake of the cancellation of a European tour after the release of their previous album, Insomniac. Recorded at Conway Recording Studios in Los Angeles, the album was written with the intent of creating a set of standalone songs as opposed to a cohesive album.",
+      "quantity_buyer": 2,
+      "id": 3
+    }
+  ],
+  "carts": [],
+  "transactions": [
+    {
+      "userId": 2,
+      "totalPrice": 510000,
+      "status": "pending",
+      "buyDate": "7/5/2020",
+      "buyEndDate": "-",
+      "id": 1
+    }
+  ],
+  "transaction_details": [
+    {
+      "transactionId": 1,
+      "productId": 1,
+      "price": 100000,
+      "quantity": 3,
+      "totalPrice": 300000,
+      "id": 1
+    },
+    {
+      "transactionId": 1,
+      "productId": 3,
+      "price": 100000,
+      "quantity": 2,
+      "totalPrice": 200000,
+      "id": 2
+    }
+  ]
+}
