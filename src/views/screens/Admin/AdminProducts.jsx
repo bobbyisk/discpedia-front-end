@@ -26,10 +26,10 @@ class AdminProducts extends React.Component {
     }
 
     getBookList = () => {
-        Axios.get(`${API_URL}/product`)
+        Axios.get(`${API_URL}/product/all`)
         .then(res => {
             console.log(res.data);
-            this.setState({ bookList: res.data});
+            this.setState({ bookList: res.data.content});
         })
         .catch(err => {
             console.log(err);

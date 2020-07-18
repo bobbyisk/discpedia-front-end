@@ -5,6 +5,7 @@ import { Link } from "react-router-dom";
 import Axios from 'axios';
 // import { API_URL } from "../../../constants/API";
 import { connect } from "react-redux";
+import swal from 'sweetalert';
 import { fillCart } from "../../../redux/actions";
 import { API_URL } from "../../../constants/API";
 
@@ -14,7 +15,8 @@ class Status extends React.Component {
         uploadBuktiPage: false,
         idUploadBukti: 0,
         transaction: [],
-        transactionDetails: []
+        transactionDetails: [],
+        buktiPict: null
     }
 
     getTransaction = () => {
@@ -33,6 +35,27 @@ class Status extends React.Component {
         .then(res => {
             console.log(res.data);
             this.setState({ transactionDetails: res.data })
+        })
+        .catch(err => {
+            console.log(err);
+        })
+    }
+
+    uploadBuktiPembayaran = (transactionId) => {
+        let formData = new FormData();
+        if(this.state.buktiPict) {
+            formData.append(
+                "file",
+                this.state.buktiPict,
+                this.state.buktiPict.name
+              );
+        }
+
+        Axios.put(`${API_URL}/transaction/buktiPembayaran/${transactionId}`, formData)
+        .then(res => {
+            console.log(res.data);
+            swal("Success!", "Bukti pembayaran is uploaded.", "success");
+            this.getTransaction();
         })
         .catch(err => {
             console.log(err);
@@ -170,8 +193,8 @@ class Status extends React.Component {
                                 <tbody>
                                     <tr>
                                         <td>{this.state.idUploadBukti}</td>
-                                        <td><input type="file" /></td>
-                                        <td><ButtonUI type="contained">Submit</ButtonUI></td>
+                                        <td><input type="file" onChange={(e) => this.setState({ buktiPict: e.target.files[0] })}/></td>
+                                        <td><ButtonUI type="contained" onClick={() => this.uploadBuktiPembayaran(this.state.idUploadBukti)}>Submit</ButtonUI></td>
                                     </tr>
                                 </tbody>
                             </Table>

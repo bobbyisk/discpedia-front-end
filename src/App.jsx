@@ -16,11 +16,12 @@ import { connect } from "react-redux";
 import Profile from './views/screens/Profile/Profile';
 import AdminProducts from './views/screens/Admin/AdminProducts';
 import AdminGenres from './views/screens/Admin/AdminGenres';
+import AdminPayments from './views/screens/Admin/AdminPayments';
 import ProductDetails from './views/screens/ProductDetails/ProductDetails';
 import Cart from './views/screens/Cart/Cart';
 import Reset from './views/screens/Auth/Reset';
 import Status from './views/screens/Status/Status';
-
+import AdminReports from './views/screens/Admin/AdminReports';
 
 const cookieObj = new Cookie();
 
@@ -42,6 +43,8 @@ class App extends React.Component {
         <>
           <Route exact path="/admin/product" component={AdminProducts} />
           <Route exact path="/admin/genre" component={AdminGenres} />
+          <Route exact path="/admin/payments" component={AdminPayments} />
+          <Route exact path="/admin/reports" component={AdminReports} />
         </>
       )
     }

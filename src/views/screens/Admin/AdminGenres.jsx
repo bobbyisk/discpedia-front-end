@@ -32,10 +32,10 @@ class AdminGenres extends React.Component {
     }
 
     getProductList = () => {
-        Axios.get(`${API_URL}/product`)
+        Axios.get(`${API_URL}/product/all`)
         .then(res => {
             console.log(res.data);
-            this.setState({ listProduct: res.data })
+            this.setState({ listProduct: res.data.content })
             console.log(this.state.listProduct)
         })
         .catch(err => {
@@ -207,7 +207,7 @@ class AdminGenres extends React.Component {
                                     onChange={(e) => this.inputData(e.target.value, "genreChosen")}
                                     value={this.state.genreChosen}
                                 >
-                                    <option selected value="">Select Category</option>
+                                    <option selected value="">Select Genre</option>
                                     {this.state.listGenre.map((val, idx) => {
                                         return (
                                             <option value={val.id} onClick={() => alert(this.state.genreChosen)}>{val.genreName}</option>

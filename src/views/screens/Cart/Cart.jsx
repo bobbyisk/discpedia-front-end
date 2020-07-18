@@ -191,10 +191,10 @@ class Cart extends React.Component {
                     totalPrice: val.product.price * val.qty
                 })
                 .then((res) => {
-                  console.log(res);
+                    console.log(res);
                 })
                 .catch((err) => {
-                  console.log(err);
+                    console.log(err);
                 })
             })
             swal("Finished", "Thank you.", "success");
@@ -283,9 +283,9 @@ class Cart extends React.Component {
                                     </tr>
                                     </tbody>
                                 </Table>
-                                <div class="custom-file mb-3">
-                                    <input type="file" class="custom-file-input" id="customFile" name="filename" />
-                                    <label class="custom-file-label" for="customFile">Upload bukti pembayaran</label>
+                                <div className="custom-file mb-3">
+                                    <input type="file" className="custom-file-input" id="customFile" name="filename" />
+                                    <label className="custom-file-label" for="customFile">Upload bukti pembayaran</label>
                                 </div>
                                 <ButtonUI type="contained" onClick={() => this.confirmHandler()}>Confirm</ButtonUI>
                             </> 

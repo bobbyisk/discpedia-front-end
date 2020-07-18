@@ -7,7 +7,7 @@ import ButtonUI from '../Button/Button';
 
 class Cards extends React.Component {
     render() {
-        const {title, img, genre, artist, stock} = this.props.data
+        const {title, img, genre, artist, stock, sold, price} = this.props.data
 
         return (
             <div className="m-2">
@@ -17,10 +17,14 @@ class Cards extends React.Component {
                         <CardText><b>{artist}</b></CardText>
                         <CardImg src={img} alt="Card image cap" width='50' height='150'/>
                         {/* <CardTitle>Genre: <i>{genre}</i></CardTitle> */}
-                        <small><b>Rp1.000.000</b></small>
+                        <small><b>{
+                            new Intl.NumberFormat(
+                            "id-ID",
+                            { style: "currency", currency: "IDR" }).format(price)
+                        }</b></small>
                         <CardText>
                             <small className="text-muted">Stock: {stock}</small>
-                            <small className="text-muted ml-2">Sold: </small>
+                            <small className="text-muted ml-2">Sold: {sold}</small>
                         </CardText>
                     </CardBody>
                 </Card>
