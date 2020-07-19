@@ -7,9 +7,23 @@ import { API_URL } from "../../../constants/API";
 
 import { connect } from "react-redux";
 import { fillCart } from "../../../redux/actions";
+import { Bar } from "react-chartjs-2"
 
 class AdminReports extends React.Component {
     state = {
+        barData: {
+            labels: [],
+            datasets: [
+                {
+                    data: []
+                }
+            ]
+        },
+        // options: {
+        //     scales: {
+        //         xAxes: [{ barPercentage: 0.5 }]
+        //     }
+        // },
         listProduct: [],
         listGenre: [],
         soldCount: 0,
@@ -26,6 +40,22 @@ class AdminReports extends React.Component {
         .then(res => {
             console.log(res.data);
             this.setState({ listProduct: res.data.content });
+            this.state.listProduct.map((val, idx) => {
+                this.setState({
+                    barData: {
+                        labels: [...this.state.barData.labels, val.title],
+                        datasets: [
+                            {
+                                label: 'Sold',
+                                backgroundColor: `rgba(0, 0, 0)`,
+                                borderColor: 'rgba(0, 0, 0)',
+                                borderWidth: 1,
+                                data: [...this.state.barData.datasets[0].data, val.sold]
+                            }
+                        ]
+                    }
+                })
+            })
             console.log(this.state.listProduct[0].sold);
             this.getSoldCount()
         })
@@ -67,6 +97,28 @@ class AdminReports extends React.Component {
         this.getProductList();
         this.getGenreList();
         this.props.fillCart(this.props.user.id);
+    }
+
+    renderChart = () => {
+        return (
+            <Bar
+                data={this.state.barData}
+                options={{
+                    title: {
+                        display: true,
+                        text: 'Chart',
+                        fontSize: 20,
+                    },
+                    legend: {
+                        display: true,
+                        position: 'right'
+                    },
+                    // animation: {
+                    //     duration: false
+                    // }
+                }}
+            />
+        )
     }
 
     renderReport = () => {
@@ -174,6 +226,9 @@ class AdminReports extends React.Component {
                             {this.renderReport()}
                         </tbody>
                     </Table>
+                </div>
+                <div>
+                    {this.renderChart()}
                 </div>
             </>
         )
