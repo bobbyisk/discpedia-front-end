@@ -4,6 +4,8 @@ import { Table, Modal, ModalHeader, ModalBody } from "reactstrap";
 import Axios from 'axios';
 // import { API_URL } from "../../../constants/API";
 import swal from "sweetalert";
+import { connect } from "react-redux";
+import { fillCart } from "../../../redux/actions";
 
 const API_URL = `http://localhost:8000`;
 
@@ -22,7 +24,9 @@ class AdminProducts extends React.Component {
             artist: ""
         },
         modalOpen: false,
-        selectedFile: null
+        selectedFile: null,
+        stockLama: 0,
+        stockGudangClicked: 0
     }
 
     getBookList = () => {
@@ -37,6 +41,12 @@ class AdminProducts extends React.Component {
     }
 
     editBtnHandler = (idx) => {
+        let stockSementara = this.state.bookList[idx].stock
+        let stockGudangSementara = this.state.bookList[idx].stock_gudang
+        // alert(stockSementara)
+        // alert(stockGudangSementara)
+        this.setState({ stockLama: stockSementara })
+        this.setState({ stockGudangClicked: stockGudangSementara })
         this.setState({
             editForm: {
                 ...this.state.bookList[idx]
@@ -46,11 +56,15 @@ class AdminProducts extends React.Component {
     }
 
     editBookHandler = () => {
+        // alert(this.state.editForm.stock)
+        // alert(this.state.stockLama + this.state.stockGudangClicked)
+        
         if(
             this.state.editForm.stock_gudang < 0 ||
-            this.state.editForm.stock < 0
+            this.state.editForm.stock < 0 ||
+            this.state.editForm.stock > (this.state.stockLama + this.state.stockGudangClicked)
         ){
-            swal("Error!", "Invalid input", "error");
+            swal("Error!", "Invalid input / overstock", "error");
         } else {
             let formData = new FormData();
     
@@ -62,7 +76,7 @@ class AdminProducts extends React.Component {
             formData.append("productData", JSON.stringify(this.state.editForm));
     
             Axios.put(
-                `${API_URL}/product/${this.state.editForm.id}/stockGudang/${this.state.editForm.stock}`,
+                `${API_URL}/product/${this.state.editForm.id}/stockGudang/${this.state.editForm.stock}/${this.state.stockLama}`,
                 formData
             )
                 .then((res) => {
@@ -161,6 +175,7 @@ class AdminProducts extends React.Component {
 
     componentDidMount() {
         this.getBookList();
+        this.props.fillCart(this.props.user.id);
     }
 
     render() {
@@ -263,7 +278,19 @@ class AdminProducts extends React.Component {
                                     className="m-2 inline"
                                     value={this.state.editForm.stock_gudang}
                                     placeholder="Stock Gudang"
+                                    // onChange={(e) => this.inputHandler(e, "stock_gudang", "editForm")}
+                                    disabled
+                                />
+                            </div>
+                            <div className="col-12">
+                                Stock Gudang:
+                                <input
+                                    type="number"
+                                    className="m-2 inline"
+                                    value={this.state.editForm.stock_gudang}
+                                    placeholder="Stock Gudang"
                                     onChange={(e) => this.inputHandler(e, "stock_gudang", "editForm")}
+                                    
                                 />
                             </div>
                             <div className="col-5 mt-3 offset-1">
@@ -381,4 +408,14 @@ class AdminProducts extends React.Component {
     }
 }
 
-export default AdminProducts;
+const mapStateToProps = (state) => {
+    return {
+        user: state.user,
+    };
+};
+
+const mapDispatchToProps = {
+    fillCart
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(AdminProducts);

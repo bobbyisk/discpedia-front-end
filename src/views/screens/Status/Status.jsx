@@ -145,6 +145,7 @@ class Status extends React.Component {
 
     componentDidMount() {
         this.getTransaction();
+        this.props.fillCart(this.props.user.id);
     }
 
     render() {
@@ -226,4 +227,8 @@ const mapStateToProps = (state) => {
     };
 };
 
-export default connect(mapStateToProps)(Status);
+const mapDispatchToProps = {
+    fillCart
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Status);

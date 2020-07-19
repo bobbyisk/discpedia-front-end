@@ -129,6 +129,7 @@ class AdminGenres extends React.Component {
     componentDidMount() {
         this.getGenreList();
         this.getProductList();
+        this.props.fillCart(this.props.user.id);
     }
 
     render() {
@@ -225,4 +226,14 @@ class AdminGenres extends React.Component {
     }
 }
 
-export default AdminGenres;
+const mapStateToProps = (state) => {
+    return {
+        user: state.user,
+    };
+};
+
+const mapDispatchToProps = {
+    fillCart
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(AdminGenres);

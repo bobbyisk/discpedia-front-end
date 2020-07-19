@@ -5,6 +5,9 @@ import { Table } from "reactstrap";
 
 import { API_URL } from "../../../constants/API";
 
+import { connect } from "react-redux";
+import { fillCart } from "../../../redux/actions";
+
 class AdminReports extends React.Component {
     state = {
         listProduct: [],
@@ -63,6 +66,7 @@ class AdminReports extends React.Component {
     componentDidMount() {
         this.getProductList();
         this.getGenreList();
+        this.props.fillCart(this.props.user.id);
     }
 
     renderReport = () => {
@@ -176,4 +180,14 @@ class AdminReports extends React.Component {
     }
 }
 
-export default AdminReports;
+const mapStateToProps = (state) => {
+    return {
+        user: state.user,
+    };
+};
+
+const mapDispatchToProps = {
+    fillCart
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(AdminReports);
