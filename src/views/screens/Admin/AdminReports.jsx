@@ -227,9 +227,11 @@ class AdminReports extends React.Component {
                         </tbody>
                     </Table>
                 </div>
-                <div>
-                    {this.renderChart()}
-                </div>
+                <center>
+                    <div className="w-75">
+                        {this.renderChart()}
+                    </div>
+                </center>
             </>
         )
     }
