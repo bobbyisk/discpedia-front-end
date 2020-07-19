@@ -8,11 +8,14 @@ import { API_URL } from "../../../constants/API";
 class AdminReports extends React.Component {
     state = {
         listProduct: [],
+        listGenre: [],
         soldCount: 0,
         searchProductData: "",
         searchArtist: "All",
         minPrice: 0,
-        maxPrice: 0
+        maxPrice: 0,
+        soldInput: 0,
+        genreChosen: 0
     }
 
     getProductList = () => {
@@ -22,6 +25,18 @@ class AdminReports extends React.Component {
             this.setState({ listProduct: res.data.content });
             console.log(this.state.listProduct[0].sold);
             this.getSoldCount()
+        })
+        .catch(err => {
+            console.log(err);
+        })
+    }
+
+    getGenreList = () => {
+        Axios.get(`${API_URL}/genre`)
+        .then(res => {
+            console.log(res.data);
+            this.setState({ listGenre: res.data })
+            console.log(this.state.listGenre)
         })
         .catch(err => {
             console.log(err);
@@ -38,15 +53,23 @@ class AdminReports extends React.Component {
         console.log(count)
     }
 
+    inputData = (e, form) => {
+        this.setState({
+          [form]: e
+        })
+        console.log(e)
+    }
+
     componentDidMount() {
         this.getProductList();
+        this.getGenreList();
     }
 
     renderReport = () => {
         let count = 0
 
         return this.state.listProduct.map((val, idx) => {
-            const { id, artist, deskripsi, img, price, stock, title, sold } = val
+            const { id, artist, deskripsi, img, price, stock, title, sold, genre } = val
 
             if(!this.state.maxPrice){
                 this.setState({ maxPrice: 99999999999 });
@@ -56,9 +79,12 @@ class AdminReports extends React.Component {
                 (
                     (val.title.toLowerCase().includes(this.state.searchProductData.toLowerCase())) && 
                     (val.artist.startsWith(this.state.searchArtist) || this.state.searchArtist == "All") && 
-                    (price >= this.state.minPrice && price <= this.state.maxPrice)
+                    (price >= this.state.minPrice && price <= this.state.maxPrice) && 
+                    (sold == this.state.soldInput || !this.state.soldInput) &&
+                    (genre.some(val => val.id === this.state.genreChosen) || !this.state.genreChosen)
                 )
             {
+                console.log(this.state.soldInput);
                 return (
                     <>
                         <tr>
@@ -73,7 +99,7 @@ class AdminReports extends React.Component {
                                 }
                             </td>
                             <td>{sold}</td>
-                            <td>{(sold / this.state.soldCount) * 100 + "%"}</td>
+                            <td>{((sold / this.state.soldCount) * 100).toFixed(2) + "%"}</td>
                         </tr>
                     </>
                 )
@@ -107,6 +133,26 @@ class AdminReports extends React.Component {
                             style={{ width: "200px" }} 
                             onChange={(e) => this.setState({ maxPrice: e.target.value })}
                         />
+                        <input 
+                            className="form-control my-2 ml-2" 
+                            type="number" 
+                            placeholder="Sold" 
+                            style={{ width: "200px" }} 
+                            onChange={(e) => this.setState({ soldInput: e.target.value })}
+                        />
+                        <select 
+                            className="form-control my-2 ml-2" 
+                            style={{ width: "100px" }} 
+                            onChange={(e) => this.inputData(e.target.value, "genreChosen")}
+                            value={this.state.genreChosen}
+                        >
+                            <option selected value="">Select Genre</option>
+                            {this.state.listGenre.map((val, idx) => {
+                                return (
+                                    <option value={val.id} onClick={() => this.setState({ genreChosen: val.id })}>{val.genreName}</option>
+                                )
+                            })}
+                        </select>
                     </div>
 
                     <Table>

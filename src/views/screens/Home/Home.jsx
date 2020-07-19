@@ -18,7 +18,7 @@ class Home extends React.Component {
     cdProducts: [],
     listGenre: [],
     currentPage: 1,
-    cdPerPage: 2,
+    cdPerPage: 3,
     totalPages: 0,
     totalElements: 0,
     minPrice: 0,

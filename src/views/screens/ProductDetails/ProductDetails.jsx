@@ -10,14 +10,18 @@ import { API_URL } from '../../../constants/API';
 class ProductDetails extends React.Component {
     state = {
         bookProduct: [],
-        cartData: []
+        cartData: [],
+        stock: 0,
+        stockAddToCart: 1
     }
 
     getBookById = () => {
         Axios.get(`${API_URL}/product/${this.props.match.params.productId}`)
         .then(res => {
             console.log(res.data);
-            this.setState({ bookProduct: res.data})
+            this.setState({ bookProduct: res.data});
+            this.setState({ stock: res.data.stock});
+            console.log("stock: " + this.state.stock);
         })
         .catch(err => {
             console.log(err);
@@ -26,52 +30,62 @@ class ProductDetails extends React.Component {
 
     addToCartHandler = () => {
         if(this.props.user.id > 0){
-            Axios.get(`${API_URL}/cart/user/${this.props.user.id}`)
-            .then(res => {
-                console.log("dibawah cart data");
-                console.log(res.data);
-                this.setState({ cartData: res.data })
-
-                let itemIndex = this.state.cartData.findIndex(val => {
-                    return val.product.id == this.state.bookProduct.id
+            this.setState({ stockAddToCart: this.state.stockAddToCart + 1 });
+            console.log("stockAddToCart: " + this.state.stockAddToCart);
+            if(this.state.stockAddToCart > this.state.stock){
+                swal(
+                    "Sorry",
+                    "Stock habis.",
+                    "warning"
+                )
+            } else {
+                Axios.get(`${API_URL}/cart/user/${this.props.user.id}`)
+                .then(res => {
+                    console.log("dibawah cart data");
+                    console.log(res.data);
+                    this.setState({ cartData: res.data })
+    
+                    let itemIndex = this.state.cartData.findIndex(val => {
+                        return val.product.id == this.state.bookProduct.id
+                    })
+    
+                    if(itemIndex >= 0) {
+                        Axios.put(`${API_URL}/cart/add/${this.state.cartData[itemIndex].id}`)
+                        .then(res => {
+                            console.log(res.data);
+                            swal(
+                                "Add to cart",
+                                "Item added to cart",
+                                "success"
+                            )
+                            this.props.fillCart(this.props.user.id);
+                        })
+                        .catch(err => {
+                            console.log(err);
+                        })
+                    } else {
+                        Axios.post(`${API_URL}/cart/add/${this.props.user.id}/${this.state.bookProduct.id}`, {
+                            qty: 1
+                        })
+                        .then(res => {
+                            console.log(res.data);
+                            swal(
+                                "Add to cart",
+                                "Item added to cart",
+                                "success"
+                            )
+                            this.props.fillCart(this.props.user.id);
+                        })
+                        .catch(err => {
+                            console.log(err);
+                        })
+                    }
                 })
-
-                if(itemIndex >= 0) {
-                    Axios.put(`${API_URL}/cart/add/${this.state.cartData[itemIndex].id}`)
-                    .then(res => {
-                        console.log(res.data);
-                        swal(
-                            "Add to cart",
-                            "Item added to cart",
-                            "success"
-                        )
-                        this.props.fillCart(this.props.user.id);
-                    })
-                    .catch(err => {
-                        console.log(err);
-                    })
-                } else {
-                    Axios.post(`${API_URL}/cart/add/${this.props.user.id}/${this.state.bookProduct.id}`, {
-                        qty: 1
-                    })
-                    .then(res => {
-                        console.log(res.data);
-                        swal(
-                            "Add to cart",
-                            "Item added to cart",
-                            "success"
-                        )
-                        this.props.fillCart(this.props.user.id);
-                    })
-                    .catch(err => {
-                        console.log(err);
-                    })
-                }
-            })
-            .catch(err => {
-                alert("Error");
-                console.log(err);
-            })
+                .catch(err => {
+                    alert("Error");
+                    console.log(err);
+                })
+            }
         } else {
             swal(
                 "Failed!",

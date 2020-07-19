@@ -46,29 +46,36 @@ class AdminProducts extends React.Component {
     }
 
     editBookHandler = () => {
-        let formData = new FormData();
-
-        formData.append(
-            "file",
-            this.state.selectedFile,
-            this.state.selectedFile.name
-        );
-        formData.append("productData", JSON.stringify(this.state.editForm));
-
-        Axios.put(
-            `${API_URL}/product/${this.state.editForm.id}`,
-            formData
-        )
-            .then((res) => {
-                console.log(res.data);
-                swal("Success!", "Your item has been edited", "success");
-                this.setState({ modalOpen: false });
-                this.getBookList();
-            })
-            .catch((err) => {
-                swal("Error!", "Your item could not be edited", "error");
-                console.log(err);
-            });
+        if(
+            this.state.editForm.stock_gudang < 0 ||
+            this.state.editForm.stock < 0
+        ){
+            swal("Error!", "Invalid input", "error");
+        } else {
+            let formData = new FormData();
+    
+            formData.append(
+                "file",
+                this.state.selectedFile,
+                this.state.selectedFile.name
+            );
+            formData.append("productData", JSON.stringify(this.state.editForm));
+    
+            Axios.put(
+                `${API_URL}/product/${this.state.editForm.id}/stockGudang/${this.state.editForm.stock}`,
+                formData
+            )
+                .then((res) => {
+                    console.log(res.data);
+                    swal("Success!", "Your item has been edited", "success");
+                    this.setState({ modalOpen: false });
+                    this.getBookList();
+                })
+                .catch((err) => {
+                    swal("Error!", "Your item could not be edited", "error");
+                    console.log(err);
+                });
+        }
     }
 
     deleteBtnHandler = (id) => {
@@ -251,6 +258,13 @@ class AdminProducts extends React.Component {
                                     placeholder="Stock "
                                     onChange={(e) => this.inputHandler(e, "stock", "editForm")}
                                 />
+                                <input
+                                    type="number"
+                                    className="m-2 inline"
+                                    value={this.state.editForm.stock_gudang}
+                                    placeholder="Stock Gudang"
+                                    onChange={(e) => this.inputHandler(e, "stock_gudang", "editForm")}
+                                />
                             </div>
                             <div className="col-5 mt-3 offset-1">
                                 <ButtonUI
@@ -335,6 +349,16 @@ class AdminProducts extends React.Component {
                                     type="number"
                                     placeholder="Stock"
                                     onChange={(e) => this.inputHandler(e, "stock", "createForm")}
+                                />
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Stock Gudang</td>
+                            <td>
+                                <input
+                                    type="number"
+                                    placeholder="Stock Gudang"
+                                    onChange={(e) => this.inputHandler(e, "stock_gudang", "createForm")}
                                 />
                             </td>
                         </tr>

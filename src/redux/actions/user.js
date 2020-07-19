@@ -3,6 +3,7 @@ import Axios from "axios";
 import Cookie from "universal-cookie";
 import userTypes from "../types/user";
 import { faUserGraduate } from "@fortawesome/free-solid-svg-icons";
+import swal from 'sweetalert';
 
 const API_URL = `http://localhost:8000`;
 const { ON_LOGIN_FAIL, ON_LOGIN_SUCCESS, ON_LOGOUT_SUCCESS, ON_SEARCH } = userTypes;
@@ -22,14 +23,18 @@ export const loginHandler = (userData) => {
             .then((res) => {
                 console.log(res.data);
                 console.log(res.data.length);
+                if(res.data.length == 0) {
+                    swal("Faled to log in.", "Password is incorrect.", "error");
+                } else {
                     dispatch({
                         type: ON_LOGIN_SUCCESS,
                         payload: res.data,
                     });
+                }
             })
             .catch((err) => {
                 console.log(err);
-                alert("Gaada");
+                swal("Faled to log in.", "Username is incorrect / no username registered", "error");
                 dispatch({
                     type: ON_LOGIN_FAIL,
                     payload: "Username atau password salah",
@@ -81,24 +86,43 @@ export const registerHandler = (userData) => {
                 console.log(res.data);
                 console.log(res.data.length);
                 if (res.data.length > 0) {
-                    alert("Udah ada");
+                    swal("Faled to register.", "Username already exists.", "error");
                     dispatch({
                         type: "ON_REGISTER_FAIL",
                         payload: "Username atau email sudah digunakan",
                     });
                 } else {
-                    Axios.post(`${API_URL}/user`, { ...userData, role: "user" })
-                        .then((res) => {
-                            console.log(res.data);
+                    Axios.get(`${API_URL}/user/email`, {
+                        params: {
+                            // username: userData.username,
+                            email: userData.email
+                        },
+                    })
+                    .then((res) => {
+                        if(res.data.length > 0) {
+                            swal("Faled to register.", "Email already exists.", "error");
                             dispatch({
-                                type: ON_LOGIN_SUCCESS,
-                                payload: res.data,
+                                type: "ON_REGISTER_FAIL",
+                                payload: "Username atau email sudah digunakan",
                             });
-                        })
-                        .catch((err) => {
-                            console.log(err);
-                            console.log("masuk post");
-                        });
+                        } else {
+                            Axios.post(`${API_URL}/user`, { ...userData, role: "user" })
+                            .then((res) => {
+                                console.log(res.data);
+                                dispatch({
+                                    type: ON_LOGIN_SUCCESS,
+                                    payload: res.data,
+                                });
+                            })
+                            .catch((err) => {
+                                console.log(err);
+                                console.log("masuk post");
+                            });
+                        }
+                    })
+                    .catch((err) => {
+                        console.log(err);
+                    })
                 }
             })
             .catch((err) => {

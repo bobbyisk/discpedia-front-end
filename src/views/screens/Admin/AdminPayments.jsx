@@ -121,12 +121,12 @@ class AdminPayments extends React.Component {
         })
         .then(res => {
             console.log(res.data);
-            swal("Success!", "Changed.", "success");
             this.setState({
                 rejectForm: false,
                 idReject: 0,
                 alasanReject: ""
             })
+            swal("Success!", "Changed.", "success");
             this.renderTransaction();
         })
         .catch(err => {
@@ -219,7 +219,7 @@ class AdminPayments extends React.Component {
                                         }
                                 </td>
                                 <td>
-                                    { status == "sukses" ? (null) : 
+                                    { status == "success" ? (null) : 
                                         (
                                             <>
                                                 <ButtonUI type="contained" className='d-inline' onClick={() => this.acceptBuktiPembayaran(id)}>Accept</ButtonUI>
@@ -244,8 +244,8 @@ class AdminPayments extends React.Component {
         return (
             <>
                 <div className="row m-2 d-flex justify-content-center">
-                <ButtonUI type="contained" onClick={() => this.setState({ activePage: "pending" })}>Pending</ButtonUI>
-                <ButtonUI type="contained" onClick={() => this.setState({ activePage: "success" })} className="ml-2">Success</ButtonUI>
+                {/* <ButtonUI type="contained" onClick={() => this.setState({ activePage: "pending" })}>Pending</ButtonUI>
+                <ButtonUI type="contained" onClick={() => this.setState({ activePage: "success" })} className="ml-2">Success</ButtonUI> */}
                 </div>
                 <div className="container">
                     <h5><b>Transaction</b></h5>

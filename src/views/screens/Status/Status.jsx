@@ -93,29 +93,29 @@ class Status extends React.Component {
 
     renderTransaction = () => {
         return this.state.transaction.map((val, idx) => {
-            const { id, totalPrice, status, buyDate, buyAccDate, buktiTrf } = val;
-            
-            if(this.state.activePage == "pending"){
-                if(val.status == "pending"){
-                    return (
-                        <>
-                            <tr>
-                                <td>{idx + 1}</td>
-                                <td>
-                                    {
-                                    new Intl.NumberFormat(
-                                    "id-ID",
-                                    { style: "currency", currency: "IDR" }).format(totalPrice)
-                                    }
-                                </td>
-                                <td>{status}</td>
-                                <td>{buyDate}</td>
-                                <td>{buyAccDate}</td>
-                                {
-                                    buktiTrf == "" ? (<td>-</td>) : (<td>Uploaded</td>)
-                                }
-                                <td>
-                                    <ButtonUI type="contained" className='d-inline' onClick={() => this.getTransactionDetails(id)}>Details</ButtonUI>
+            const { id, totalPrice, status, buyDate, buyAccDate, buktiTrf, alasan } = val;
+        
+            return (
+                <>
+                    <tr>
+                        <td>{idx + 1}</td>
+                        <td>
+                            {
+                            new Intl.NumberFormat(
+                            "id-ID",
+                            { style: "currency", currency: "IDR" }).format(totalPrice)
+                            }
+                        </td>
+                        <td>{status}</td>
+                        <td>{buyDate}</td>
+                        <td>{buyAccDate}</td>
+                        {
+                            buktiTrf == "" ? (<td>-</td>) : (<td>Uploaded</td>)
+                        }
+                        <td>
+                            <ButtonUI type="contained" className='d-inline' onClick={() => this.getTransactionDetails(id)}>Details</ButtonUI>
+                            { status == "success" ? (null) : 
+                                (
                                     <ButtonUI 
                                         type="contained" 
                                         className='d-inline ml-2' 
@@ -123,12 +123,23 @@ class Status extends React.Component {
                                     >
                                         Upload Bukti
                                     </ButtonUI>
-                                </td>
-                            </tr>
-                        </>
-                    )
-                }
-            }
+                                )
+                            }
+                            { status != "rejected" ? (null) : 
+                                (
+                                    <ButtonUI 
+                                        type="contained" 
+                                        className='d-inline ml-2' 
+                                        onClick={() => swal(alasan)}
+                                    >
+                                        Alasan Reject
+                                    </ButtonUI>
+                                )
+                            }
+                        </td>
+                    </tr>
+                </>
+            )
         })
     }
 
@@ -140,8 +151,8 @@ class Status extends React.Component {
         return (
             <>
                 <div className="row m-2 d-flex justify-content-center">
-                <ButtonUI type="contained" onClick={() => this.setState({ activePage: "pending" })}>Pending</ButtonUI>
-                <ButtonUI type="contained" onClick={() => this.setState({ activePage: "success" })} className="ml-2">Success</ButtonUI>
+                {/* <ButtonUI type="contained" onClick={() => this.setState({ activePage: "pending" })}>Pending</ButtonUI>
+                <ButtonUI type="contained" onClick={() => this.setState({ activePage: "success" })} className="ml-2">Success</ButtonUI> */}
                 </div>
                 <div className="container">
                     <h5><b>Transaction</b></h5>

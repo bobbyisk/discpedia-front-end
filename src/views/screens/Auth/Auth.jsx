@@ -36,7 +36,7 @@ class Auth extends React.Component {
 
     componentDidUpdate() {
         if (this.props.user.id) {
-            alert("Logged in.");
+            swal("Success!", "Logged in.", "success");
             const cookie = new Cookies();
             cookie.set("authData", JSON.stringify(this.props.user), { path: "/" });
         }

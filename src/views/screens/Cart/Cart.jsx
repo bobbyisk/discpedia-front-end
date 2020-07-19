@@ -130,7 +130,7 @@ class Cart extends React.Component {
     }
 
     deleteCartHandler = (id) => {
-        alert(id);
+        // alert(id);
         Axios.delete(`${API_URL}/cart/delete/${id}`)
         .then(res => {
             console.log(res.data);

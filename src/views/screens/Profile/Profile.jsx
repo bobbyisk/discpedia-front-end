@@ -87,6 +87,7 @@ class Profile extends React.Component {
             })
             .catch(err => {
                 console.log(err);
+                swal("Error!", "Wrong old password.", "error");
             })
 
         } else {
@@ -232,16 +233,20 @@ class Profile extends React.Component {
                             <b>Username</b>
                             <input type="text" className="form-control" value={this.props.user.username} placeholder="Username" disabled/>
                             <b>Email</b>
-                            <input type="email" className="form-control" value={this.state.userData.email} placeholder="Email" />
-                            <b>Alamat</b>
                             {this.props.user.verified ? (
-                                <input type="text" className="form-control" value={this.state.userData.alamat} placeholder="Alamat" />
+                                <input type="email" className="form-control" value={this.state.userData.email} placeholder="Email" onChange={(e) => this.inputHandler(e, "email", "userData")}/>
                             ) : (
-                                <input type="text" className="form-control" value={this.state.userData.alamat} placeholder="Alamat" disabled />
+                                <input type="email" className="form-control" value={this.state.userData.email} placeholder="Email" disabled/>
                             ) }
                             
+                            <b>Alamat</b>
+                            <input type="text" className="form-control" value={this.state.userData.alamat} placeholder="Alamat" onChange={(e) => this.inputHandler(e, "alamat", "userData")}/>
                             <b>No. Telp.</b>
-                            <input type="text" className="form-control" value={this.state.userData.telp} placeholder="No. Telp." onChange={(e) => this.inputHandler(e, "telp", "userData")} />
+                            {this.props.user.verified ? (
+                                <input type="text" className="form-control" value={this.state.userData.telp} placeholder="No. Telp." onChange={(e) => this.inputHandler(e, "telp", "userData")} />
+                            ) : (
+                                <input type="text" className="form-control" value={this.state.userData.telp} placeholder="No. Telp." disabled />
+                            ) }
                         </div>
                         <ButtonUI className='d-inline ml-3' onClick={() => this.editBtnHandler(this.props.user.id)}>Edit</ButtonUI>
                     </div>

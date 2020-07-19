@@ -195,7 +195,7 @@ class AdminGenres extends React.Component {
                                     <option selected value="">Select CD</option>
                                     {this.state.listProduct.map((val, idx) => {
                                         return (
-                                            <option value={val.id} onClick={() => alert(val.id)}>{val.title}</option>
+                                            <option value={val.id}>{val.title}</option>
                                         )
                                     })}
                                 </select>
@@ -210,7 +210,7 @@ class AdminGenres extends React.Component {
                                     <option selected value="">Select Genre</option>
                                     {this.state.listGenre.map((val, idx) => {
                                         return (
-                                            <option value={val.id} onClick={() => alert(this.state.genreChosen)}>{val.genreName}</option>
+                                            <option value={val.id}>{val.genreName}</option>
                                         )
                                     })}
                                 </select>
