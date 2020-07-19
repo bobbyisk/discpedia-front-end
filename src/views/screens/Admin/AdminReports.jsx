@@ -19,11 +19,6 @@ class AdminReports extends React.Component {
                 }
             ]
         },
-        // options: {
-        //     scales: {
-        //         xAxes: [{ barPercentage: 0.5 }]
-        //     }
-        // },
         listProduct: [],
         listGenre: [],
         soldCount: 0,
@@ -47,10 +42,8 @@ class AdminReports extends React.Component {
                         datasets: [
                             {
                                 label: 'Sold',
-                                backgroundColor: `rgba(0, 0, 0)`,
-                                borderColor: 'rgba(0, 0, 0)',
-                                borderWidth: 1,
-                                data: [...this.state.barData.datasets[0].data, val.sold]
+                                data: [...this.state.barData.datasets[0].data, val.sold],
+                                backgroundColor: `rgba(0, 0, 0)`
                             }
                         ]
                     }
@@ -108,14 +101,8 @@ class AdminReports extends React.Component {
                         display: true,
                         text: 'Chart',
                         fontSize: 20,
+                        fontColor: 'black'
                     },
-                    legend: {
-                        display: true,
-                        position: 'right'
-                    },
-                    // animation: {
-                    //     duration: false
-                    // }
                 }}
             />
         )
