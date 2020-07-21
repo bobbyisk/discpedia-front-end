@@ -107,12 +107,21 @@ class AdminProducts extends React.Component {
     addBookHandler = () => {
         let formData = new FormData();
 
+        let addData = {
+            title: this.state.createForm.title,
+            artist: this.state.createForm.artist,
+            deskripsi: this.state.createForm.deskripsi,
+            stock: this.state.createForm.stock,
+            stock_gudang: this.state.createForm.stock,
+            price: this.state.createForm.price
+        }
+
         formData.append(
             "file",
             this.state.selectedFile,
             this.state.selectedFile.name
         );
-        formData.append("productData", JSON.stringify(this.state.createForm));
+        formData.append("productData", JSON.stringify(addData));
 
         Axios.post(`${API_URL}/product`, formData)
             .then((res) => {
@@ -120,7 +129,7 @@ class AdminProducts extends React.Component {
                 swal("Success!", "Your item has been added to the list", "success");
                 this.setState({
                     createForm: {
-                        productName: "",
+                        title: "",
                         price: 0,
                         genre: "",
                         image: "",
@@ -379,7 +388,7 @@ class AdminProducts extends React.Component {
                                 />
                             </td>
                         </tr>
-                        <tr>
+                        {/* <tr>
                             <td>Stock Gudang</td>
                             <td>
                                 <input
@@ -388,7 +397,7 @@ class AdminProducts extends React.Component {
                                     onChange={(e) => this.inputHandler(e, "stock_gudang", "createForm")}
                                 />
                             </td>
-                        </tr>
+                        </tr> */}
                         <tr>
                             <td>Price</td>
                             <td>
